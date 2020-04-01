@@ -1,17 +1,26 @@
 import java.lang.Math;
 
 public class AccessPoint{
-  protected int x;
-  protected int y;
-  protected MySimulator god;
-  protected int bandwidth; //max
-  protected int throughput; //curr
+  public double x;
+  public double y;
+  public MySimulator god;
+  public int bandwidth; //max
+  public int throughput; //curr
+  public int demand; //actual requested;
   
   public AccessPoint(MySimulator god){
     this.god = god;
+    bandwidth = 500;
+    throughput = bandwidth;
+    x = Utils.rand(god.room_size);
+    y = Utils.rand(god.room_size);
   }
   
-  public double getRssi(int cx, int cy){
+  public void update(){
+    throughput = bandwidth;
+  }
+  
+  public double getRssi(double cx, double cy){
     //distance = 10^((27.55-(20*log10(freq))+signalLevel)/20)
     double d = Utils.dither(Math.sqrt(Math.pow(x - cx, 2) + Math.pow(x - cx, 2)), 0.5);
     double rssi = Utils.distance2rssi(d);
@@ -19,13 +28,16 @@ public class AccessPoint{
     return 0 - rssi;
   }
   
-  public int requestData(int request, int x, int y){
+  //process request and return actual data given
+  public int requestData(int request, double x, double y){
     
     double rssi = getRssi(x, y);
     
     double mbps = Utils.rssi2mbps(rssi);
     
     int use = (int)Math.floor(request < mbps ? request : mbps);
+    
+    demand += use;
     
     if(throughput <= 0){
       return 0;
