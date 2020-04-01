@@ -7,10 +7,11 @@ public class AccessPoint{
   public int bandwidth; //max
   public int throughput; //curr
   public int demand; //actual requested;
+  public int prev_demand;
   
   public AccessPoint(MySimulator god){
     this.god = god;
-    bandwidth = 500;
+    bandwidth = 500000;
     throughput = bandwidth;
     x = Utils.rand(god.room_size);
     y = Utils.rand(god.room_size);
@@ -18,11 +19,13 @@ public class AccessPoint{
   
   public void update(){
     throughput = bandwidth;
+    prev_demand = demand;
+    demand = 0;
   }
   
   public double getRssi(double cx, double cy){
     //distance = 10^((27.55-(20*log10(freq))+signalLevel)/20)
-    double d = Utils.dither(Math.sqrt(Math.pow(x - cx, 2) + Math.pow(x - cx, 2)), 0.5);
+    double d = Utils.dither(Math.sqrt(Math.pow(x - cx, 2) + Math.pow(x - cx, 2)), 0.1);
     double rssi = Utils.distance2rssi(d);
     
     return 0 - rssi;
