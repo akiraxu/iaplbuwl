@@ -22,12 +22,14 @@ public class Client{
     baseData = (int)(Utils.rand(50000)) + 1;
   }
   
-  //connect to ap if not connected, or reconnect when the connected one too low, then use data
+  //do probe request, not in use
   public void preUpdate(){
     for(AccessPoint ap : god.aps){
       ap.requestRssi(this);
     }
   }
+  
+  //connect to ap if not connected, or reconnect when the connected one too low, then use data
   public void update(){
     if(connectTo == null){
       connectAP();
@@ -61,6 +63,7 @@ public class Client{
     }
   }
   
+  //request use this amount of data
   public void requestData(){
     sat = 0;
     if(connectTo != null){
@@ -70,6 +73,7 @@ public class Client{
     }
   }
   
+  //actual use the data
   public void useData(){
     sat = 0;
     if(connectTo != null){
@@ -90,8 +94,8 @@ public class Client{
       target_x = Utils.rand(god.room_size);
       target_y = Utils.rand(god.room_size);
     }
-    double dx = Math.signum(target_x - x) * Utils.dither(4.4, 0.5); // avg walk speed is 1.4m/s
-    double dy = Math.signum(target_y - y) * Utils.dither(4.4, 0.5);
+    double dx = Math.signum(target_x - x) * Utils.dither(1.4, 0.5); // avg walk speed is 1.4m/s
+    double dy = Math.signum(target_y - y) * Utils.dither(1.4, 0.5);
     
     x += dx;
     y += dy;

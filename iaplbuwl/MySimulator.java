@@ -23,14 +23,17 @@ public class MySimulator{
     
     Collections.shuffle(devices);
     
+    //not in use
     for(Client c : devices){
       //c.preUpdate();
     }
     
+    //device update connection and request data
     for(Client c : devices){
       c.update();
     }
     
+    //device use data
     double client_sat = 0;
     for(Client c : devices){
       c.postUpdate();
@@ -42,6 +45,7 @@ public class MySimulator{
     double max = 0;
     ArrayList<Double> loads = new ArrayList<Double>();
     
+    //ap reset load
     for(AccessPoint ap : aps){
       ap.update();
       double load = ap.prev_demand * 1.0 / ap.bandwidth;
@@ -58,19 +62,23 @@ public class MySimulator{
     sd = Math.sqrt(sd / aps.size());
     
     //System.out.println("Avg. AccessPoint Demand: " + ap_demand + "\nAvg. Client Satisfaction: " + client_sat);
-    p.println(ap_demand + "," + client_sat + "," + sd);
+    p.println(ap_demand + "," + client_sat);
   }
   
   public static void oneRound(PrintWriter p){
     MySimulator god = new MySimulator();
     
+    //create 50 random APs
     for(int i = 0; i < 50; i++){
       god.aps.add(new AccessPoint(god));
     }
     
+    //create 50000 random users
     for(int i = 0; i < 5000; i++){
       god.devices.add(new Client(god));
     }
+    
+    //run for 100 round
     for(int i = 0; i < 100; i++){
       god.updateAll(p);
     }

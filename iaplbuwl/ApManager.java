@@ -11,6 +11,8 @@ public class ApManager{
   public ApManager(){
     db = new HashMap<Client, HashMap<AccessPoint, Double>>();
   }
+  
+  //add a entry
   public void addEntry(Client c, AccessPoint ap, double rssi){
     HashMap<AccessPoint, Double> ls = db.get(c);
     if(ls == null){
@@ -19,17 +21,21 @@ public class ApManager{
     ls.put(ap, rssi);
     db.put(c, ls);
   }
+  
+  //return the rssi the ap should geive back to device
   public double apRssiFor(AccessPoint x, Client c){
     AccessPoint ap = null;
     double rssi = -1000;
     
     if(Utils.newMethod){
+      //select bset ap
       ap = bestSuitedAp3(c, db.get(c));
       if(ap == null){
         return -1000;
       }
       rssi = db.get(c).get(ap);
     }else{
+      //select the ap with higest rssi
       for(Map.Entry<AccessPoint, Double> pair : db.get(c).entrySet()){
         if(pair.getValue() > rssi){
           ap = pair.getKey();
@@ -39,6 +45,8 @@ public class ApManager{
     }
     return x == ap ? rssi : -1000;
   }
+  
+  //idea was sort ap by close to the client needs circle, not in use
   public AccessPoint bestSuitedAp1(Client c, HashMap<AccessPoint, Double> m){
     double needs = c.baseData;
     List<AccessPoint> ls = new ArrayList<AccessPoint>();
@@ -59,6 +67,8 @@ public class ApManager{
     }
     return ap;
   }
+  
+  //similer to prev, but sort load first, not in use
   public AccessPoint bestSuitedAp2(Client c, HashMap<AccessPoint, Double> m){
     double needs = c.baseData;
     List<AccessPoint> ls = new ArrayList<AccessPoint>();
@@ -79,15 +89,19 @@ public class ApManager{
     }
     return ap;
   }
+  
+  //select the lowest load in range
   public AccessPoint bestSuitedAp3(Client c, HashMap<AccessPoint, Double> m){
     double needs = Utils.mbps2rssi(c.baseData);
     ArrayList<AccessPoint> ls = new ArrayList<AccessPoint>();
     
+    //select aps that suitable for the data rate requirement
     for(Map.Entry<AccessPoint, Double> pair : db.get(c).entrySet()){
       if(pair.getValue() > needs - 5){
         ls.add(pair.getKey());
       }
     }
+    //if none, extend the range to all can connect aps
     if(ls.size() == 0){
       ls = new ArrayList<AccessPoint>();
       for(Map.Entry<AccessPoint, Double> pair : db.get(c).entrySet()){
@@ -96,6 +110,8 @@ public class ApManager{
         }
       }
     }
+    
+    //select lowest load server
     AccessPoint out = null;
     double load = 100;
     for(AccessPoint ap : ls){

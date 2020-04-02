@@ -25,6 +25,7 @@ public class AccessPoint{
     demand = 0;
   }
   
+  //get rssi and update entry in ap manager
   public void requestRssi(Client c){
     //distance = 10^((27.55-(20*log10(freq))+signalLevel)/20)
     double d = Utils.dither(Math.sqrt(Math.pow(x - c.x, 2) + Math.pow(x - c.x, 2)), 0.25);
@@ -37,7 +38,7 @@ public class AccessPoint{
     return god.manager.apRssiFor(this, c);
   }
   
-  //process request and return actual data given
+  //process request, used to estimate demand and average out the use
   public int requestData(int request, Client c){
     
     double rssi = getRssi(c);
@@ -58,6 +59,7 @@ public class AccessPoint{
     return use;
   }
   
+  //process the data transmision and return actual given
   public int useData(int request, Client c){
     
     double rssi = getRssi(c);
