@@ -25,7 +25,7 @@ public class AccessPoint{
   
   public double getRssi(double cx, double cy){
     //distance = 10^((27.55-(20*log10(freq))+signalLevel)/20)
-    double d = Utils.dither(Math.sqrt(Math.pow(x - cx, 2) + Math.pow(x - cx, 2)), 0.1);
+    double d = Utils.dither(Math.sqrt(Math.pow(x - cx, 2) + Math.pow(x - cx, 2)), 0.05);
     double rssi = Utils.distance2rssi(d);
     
     return 0 - rssi;

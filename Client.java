@@ -33,6 +33,7 @@ public class Client{
     if(connectTo != null){
       useData();
     }
+    moving();
   }
   
   //connect to ap if rssi is greater than -100dbm
@@ -67,8 +68,8 @@ public class Client{
       target_x = Utils.rand(god.room_size);
       target_y = Utils.rand(god.room_size);
     }
-    double dx = Math.signum(target_x - x) * Utils.dither(4.4, 0.5); // avg walk speed is 1.4m/s
-    double dy = Math.signum(target_y - y) * Utils.dither(4.4, 0.5);
+    double dx = Math.signum(target_x - x) * Utils.dither(2.4, 0.5); // avg walk speed is 1.4m/s
+    double dy = Math.signum(target_y - y) * Utils.dither(2.4, 0.5);
     
     x += dx;
     y += dy;

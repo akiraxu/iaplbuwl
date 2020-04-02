@@ -45,7 +45,7 @@ public class MySimulator{
     try{
       FileWriter fileWriter = new FileWriter("out1.csv");
       PrintWriter printWriter = new PrintWriter(fileWriter);
-      for(int i = 0; i < 10000; i++){
+      for(int i = 0; i < 2000; i++){
         god.updateAll(printWriter);
       }
       printWriter.close();
