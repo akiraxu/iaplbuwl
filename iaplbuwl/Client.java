@@ -8,6 +8,7 @@ public class Client{
   public AccessPoint connectTo;
   public int baseData;
   public double sat;
+  public int dataWanted;
   
   protected MySimulator god;
   
@@ -38,9 +39,9 @@ public class Client{
     //connectAP();
     sat = 0;
     if(connectTo != null){
-      useData();
+      requestData();
     }
-    moving();
+    //moving();
   }
   
   //connect to ap if rssi is greater than -100dbm
@@ -60,13 +61,27 @@ public class Client{
     }
   }
   
-  public void useData(){
+  public void requestData(){
     sat = 0;
     if(connectTo != null){
-      int d = (int)(Utils.dither(baseData, 0.2));
+      int d = dataWanted = (int)(Utils.dither(baseData, 0.2));
       sat = connectTo.requestData(d, this) * 1.0 / d;
       sat = d == 0 ? 0 : sat;
     }
+  }
+  
+  public void useData(){
+    sat = 0;
+    if(connectTo != null){
+      int d = dataWanted;
+      sat = connectTo.useData(d, this) * 1.0 / d;
+      sat = d == 0 ? 0 : sat;
+    }
+  }
+  
+  public void postUpdate(){
+    useData();
+    moving();
   }
   
   //people will move to his/her target location, smaill chance to change target
@@ -75,8 +90,8 @@ public class Client{
       target_x = Utils.rand(god.room_size);
       target_y = Utils.rand(god.room_size);
     }
-    double dx = Math.signum(target_x - x) * Utils.dither(2.4, 0.5); // avg walk speed is 1.4m/s
-    double dy = Math.signum(target_y - y) * Utils.dither(2.4, 0.5);
+    double dx = Math.signum(target_x - x) * Utils.dither(4.4, 0.5); // avg walk speed is 1.4m/s
+    double dy = Math.signum(target_y - y) * Utils.dither(4.4, 0.5);
     
     x += dx;
     y += dy;

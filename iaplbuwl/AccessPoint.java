@@ -28,7 +28,7 @@ public class AccessPoint{
   public void requestRssi(Client c){
     //distance = 10^((27.55-(20*log10(freq))+signalLevel)/20)
     double d = Utils.dither(Math.sqrt(Math.pow(x - c.x, 2) + Math.pow(x - c.x, 2)), 0.25);
-    double rssi = demand < 0 ? 0 : 0 - Utils.distance2rssi(d);
+    double rssi = (demand < 0 && !Utils.newMethod) ? 0 : Utils.distance2rssi(d);
     god.manager.addEntry(c, this, rssi);
   }
   
@@ -55,7 +55,26 @@ public class AccessPoint{
     if(throughput <= 0){
       return 0;
     }
+    return use;
+  }
+  
+  public int useData(int request, Client c){
+    
+    double rssi = getRssi(c);
+    
+    if(rssi < -100){
+      return 0;
+    }
+    
+    double mbps = Utils.rssi2mbps(rssi);
+    
+    int use = (int)(Math.floor(request < mbps ? request : mbps) * (bandwidth > demand ? 1 : bandwidth / demand));
+    
+    if(throughput <= 0){
+      return 0;
+    }
     throughput -= use;
     return throughput > 0 ? use : use + throughput;
   }
+  
 }
