@@ -1,3 +1,5 @@
+package iaplbuwl;
+
 public class Client{
   public double x;
   public double y;
@@ -20,11 +22,16 @@ public class Client{
   }
   
   //connect to ap if not connected, or reconnect when the connected one too low, then use data
+  public void preUpdate(){
+    for(AccessPoint ap : god.aps){
+      ap.requestRssi(this);
+    }
+  }
   public void update(){
     if(connectTo == null){
       connectAP();
     }else{
-      if(connectTo.getRssi(x, y) < -100){
+      if(connectTo.getRssi(this) < -100){
         connectAP();
       }
     }
@@ -41,9 +48,9 @@ public class Client{
     AccessPoint max = god.aps.get(0);
     double rssi = -1000;
     for(AccessPoint ap : god.aps){
-      if(ap.getRssi(x, y) > rssi){
+      if(ap.getRssi(this) > rssi){
         max = ap;
-        rssi = ap.getRssi(x, y);
+        rssi = ap.getRssi(this);
       }
     }
     if(rssi > -100){
@@ -57,7 +64,7 @@ public class Client{
     sat = 0;
     if(connectTo != null){
       int d = (int)(Utils.dither(baseData, 0.2));
-      sat = connectTo.requestData(d, x, y) * 1.0 / d;
+      sat = connectTo.requestData(d, this) * 1.0 / d;
       sat = d == 0 ? 0 : sat;
     }
   }

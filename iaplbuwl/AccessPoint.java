@@ -1,3 +1,5 @@
+package iaplbuwl;
+
 import java.lang.Math;
 
 public class AccessPoint{
@@ -23,18 +25,26 @@ public class AccessPoint{
     demand = 0;
   }
   
-  public double getRssi(double cx, double cy){
+  public void requestRssi(Client c){
     //distance = 10^((27.55-(20*log10(freq))+signalLevel)/20)
-    double d = Utils.dither(Math.sqrt(Math.pow(x - cx, 2) + Math.pow(x - cx, 2)), 0.05);
-    double rssi = Utils.distance2rssi(d);
-    
-    return 0 - rssi;
+    double d = Utils.dither(Math.sqrt(Math.pow(x - c.x, 2) + Math.pow(x - c.x, 2)), 0.25);
+    double rssi = demand < 0 ? 0 : 0 - Utils.distance2rssi(d);
+    god.manager.addEntry(c, this, rssi);
+  }
+  
+  public double getRssi(Client c){
+    requestRssi(c);
+    return god.manager.apRssiFor(this, c);
   }
   
   //process request and return actual data given
-  public int requestData(int request, double x, double y){
+  public int requestData(int request, Client c){
     
-    double rssi = getRssi(x, y);
+    double rssi = getRssi(c);
+    
+    if(rssi < -100){
+      return 0;
+    }
     
     double mbps = Utils.rssi2mbps(rssi);
     

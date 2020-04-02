@@ -1,3 +1,5 @@
+package iaplbuwl;
+
 import java.util.ArrayList;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -5,6 +7,7 @@ import java.io.PrintWriter;
 public class MySimulator{
   public ArrayList<AccessPoint> aps;
   public ArrayList<Client> devices;
+  public ApManager manager;
   
   public int room_size = 1000;
   
@@ -12,9 +15,15 @@ public class MySimulator{
   public MySimulator(){
     aps = new ArrayList<AccessPoint>();
     devices = new ArrayList<Client>();
+    manager = new ApManager();
   }
   
   public void updateAll(PrintWriter p){
+    
+    for(Client c : devices){
+      //c.preUpdate();
+    }
+    
     double client_sat = 0;
     for(Client c : devices){
       c.update();
@@ -50,6 +59,7 @@ public class MySimulator{
       }
       printWriter.close();
     }catch(Exception e){
+      e.printStackTrace(System.out);
     }
   }
 }
