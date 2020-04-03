@@ -86,8 +86,19 @@ public class MySimulator{
   
   public static void main(String[] args){
     try{
-      FileWriter fileWriter = new FileWriter("out1.csv");
+      //use our frist paper method
+      Utils.newMethod = false;
+      FileWriter fileWriter = new FileWriter("paper.csv");
       PrintWriter printWriter = new PrintWriter(fileWriter);
+      for(int i = 0; i < 20; i++){
+        oneRound(printWriter);
+      }
+      printWriter.close();
+      
+      //use our improved method
+      Utils.newMethod = true;
+      fileWriter = new FileWriter("ours.csv");
+      printWriter = new PrintWriter(fileWriter);
       for(int i = 0; i < 20; i++){
         oneRound(printWriter);
       }
