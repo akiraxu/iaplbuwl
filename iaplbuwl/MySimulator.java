@@ -79,17 +79,27 @@ public class MySimulator{
     }
     
     //run for 100 round
-    for(int i = 0; i < 100; i++){
+    for(int i = 0; i < (Utils.naive ? 2000 : 200); i++){
       god.updateAll(p);
     }
   }
   
   public static void main(String[] args){
     try{
-      //use our frist paper method
-      Utils.newMethod = false;
-      FileWriter fileWriter = new FileWriter("paper.csv");
+      //use naive way
+      Utils.naive = true;
+      FileWriter fileWriter = new FileWriter("naive.csv");
       PrintWriter printWriter = new PrintWriter(fileWriter);
+      printWriter.println("ap_load,client_sat,max_ap_load,ap_load_sd");
+      for(int i = 0; i < 10; i++){
+        oneRound(printWriter);
+      }
+      
+      //use our frist paper method
+      Utils.naive = false;
+      Utils.newMethod = false;
+      fileWriter = new FileWriter("paper.csv");
+      printWriter = new PrintWriter(fileWriter);
       printWriter.println("ap_load,client_sat,max_ap_load,ap_load_sd");
       for(int i = 0; i < 20; i++){
         oneRound(printWriter);

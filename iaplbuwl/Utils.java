@@ -8,6 +8,8 @@ public class Utils{
   
   public static boolean newMethod = true;
   
+  public static boolean naive = false;
+  
   public static Random rand = new Random(new Date().getTime());
   
   public static double rssi2mbps(double rssi){

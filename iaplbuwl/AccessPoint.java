@@ -34,6 +34,9 @@ public class AccessPoint{
   }
   
   public double getRssi(Client c){
+    if(Utils.naive){
+      return Utils.distance2rssi(Utils.dither(Math.sqrt(Math.pow(x - c.x, 2) + Math.pow(x - c.x, 2)), 0.25));
+    }
     requestRssi(c);
     return god.manager.apRssiFor(this, c);
   }
