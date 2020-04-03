@@ -62,7 +62,7 @@ public class MySimulator{
     sd = Math.sqrt(sd / aps.size());
     
     //System.out.println("Avg. AccessPoint Demand: " + ap_demand + "\nAvg. Client Satisfaction: " + client_sat);
-    p.println(ap_demand + "," + client_sat);
+    p.println(ap_demand + "," + client_sat + "," + max + "," + sd);
   }
   
   public static void oneRound(PrintWriter p){
@@ -90,6 +90,7 @@ public class MySimulator{
       Utils.newMethod = false;
       FileWriter fileWriter = new FileWriter("paper.csv");
       PrintWriter printWriter = new PrintWriter(fileWriter);
+      printWriter.println("ap_load,client_sat,max_ap_load,ap_load_sd");
       for(int i = 0; i < 20; i++){
         oneRound(printWriter);
       }
@@ -99,6 +100,7 @@ public class MySimulator{
       Utils.newMethod = true;
       fileWriter = new FileWriter("ours.csv");
       printWriter = new PrintWriter(fileWriter);
+      printWriter.println("ap_load,client_sat,max_ap_load,ap_load_sd");
       for(int i = 0; i < 20; i++){
         oneRound(printWriter);
       }
